@@ -1,0 +1,27 @@
+{
+    "name": "saseuz/laravel-auth-rdy",
+    "description": "Larvel authentication library for admin user.",
+    "type": "library",
+    "autoload": {
+        "psr-4": {
+            "Saseuz\\LaravelAuthRdy\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "Saseuz\\LaravelAuthRdy\\LaravelAuthRdyServiceProvider"
+            ]
+        }
+    },
+    "require": {
+        "spatie/laravel-permission": "6.x-dev"
+    },
+    "authors": [
+        {
+            "name": "saseuz",
+            "email": "soulkeeper94@gmail.com"
+        }
+    ],
+    "minimum-stability": "dev"
+}

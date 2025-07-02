@@ -1,0 +1,13 @@
+<?php
+
+namespace Saseuz\LaravelAuthRdy\Models;
+
+use Spatie\Permission\Models\Permission as SpatiePermission;
+
+class Permission extends SpatiePermission 
+{
+    public function group()
+    {
+        return $this->belongsTo(PermissionGroup::class, 'permission_group_id');
+    }
+}
