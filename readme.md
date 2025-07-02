@@ -64,7 +64,15 @@ php artisan db:seed
 
 ```
 
-6. Replace code ..
+6. add a middleware to routes/backend.php
+```
+Route::group([
+    ...
+    'middleware' => ['admin.auth']
+]
+```
+
+7. Replace code ..
 To sidebar.blade.php
 ```
 <!-- Main Sidebar Container -->
