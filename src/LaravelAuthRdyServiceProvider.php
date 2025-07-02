@@ -23,6 +23,15 @@ class LaravelAuthRdyServiceProvider extends ServiceProvider
         $router = $this->app->make(Router::class);
         $router->aliasMiddleware('admin.auth', AdminAuthenticate::class);
 
+        // Super Admin Blade Directive
+        // Usge: @superAdmin ... @endsuperAdmin
+        Blade::if('superAdmin', function() {
+            $user = auth('admin')->user();
+            return $user && $user->hasRole('super-admin');
+        });
+
+        // Admin Can Blade Directive
+        // Usage: @adminCan('permission_name') ... @endadminCan
         Blade::if('adminCan', function ($permission) {
             $user = auth('admin')->user();
             return $user && $user->can($permission);

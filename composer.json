@@ -15,7 +15,7 @@
         }
     },
     "require": {
-        "spatie/laravel-permission": "6.x-dev"
+        "spatie/laravel-permission": "^6.0"
     },
     "authors": [
         {
