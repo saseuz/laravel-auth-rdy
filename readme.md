@@ -1,9 +1,25 @@
 1. install spatie laravel permission by following the doc
+    Add this to `app\Providers\AppServiceProvider.php`
+    - Spatie\Permission\PermissionServiceProvider::class
+    then `php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"`
 
 2. for uuid change in `model_has_permissions` and `model_has_roles`
 ```
     - $table->unsignedBigInteger($columnNames['model_morph_key']);
     + $table->uuid($columnNames['model_morph_key']);
+```
+then run `php artisan migrate`
+<br>
+
+Register middlewares in `boostrap/app.php`
+```
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->alias([
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+    ]);
+})
 ```
 
 3. add this code in Providers/AppServiceProvider.php
@@ -33,6 +49,9 @@ Run this code in project to install configs and seeders
 ```
 php artisan vendor:publish --tag=install-adminauth
 ```
+
+And Migrate <br>
+`php artisan migrate`
 
 Add this code to database/DatabaseSeeder.php
 ```
@@ -66,18 +85,7 @@ php artisan db:seed
 
 ```
 
-6. Register middlewares in `boostrap/app.php`
-```
-->withMiddleware(function (Middleware $middleware): void {
-    $middleware->alias([
-        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
-        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
-        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
-    ]);
-})
-```
-
-7. Replace to routes/backend.php
+6. Replace to routes/backend.php
 ```
 <?php
 
