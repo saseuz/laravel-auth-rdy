@@ -1,4 +1,6 @@
-1. install spatie laravel permission by following the doc <br>
+1. install spatie laravel permission by following the doc 
+    ```composer require spatie/laravel-permission```
+    <br>
     Add this to `app\Providers\AppServiceProvider.php` <br>
     - ```Spatie\Permission\PermissionServiceProvider::class``` <br>
     then `php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"`
