@@ -34,12 +34,14 @@ class LaravelAuthRdyServiceProvider extends ServiceProvider
         // Usage: @adminCan('permission_name') ... @endadminCan
         Blade::if('adminCan', function ($permission) {
             $user = auth('admin')->user();
-            return $user && $user->can($permission);
+            return $user && $user->canAny($permission);
         });
 
         $this->publishes([
             __DIR__ . '/../config' => config_path(),
             __DIR__ . '/../database/seeders' => database_path('seeders'),
+            __DIR__ . '/Http/Controllers/Backend' => app_path('Http/Controllers/Backend'),
+            __DIR__ . '/../resources/views/backend' => resource_path('views/backend'),
         ], 'install-adminauth');
     }
 

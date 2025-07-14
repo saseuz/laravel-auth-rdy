@@ -3,7 +3,7 @@
 namespace Saseuz\LaravelAuthRdy\Models;
 
 use Illuminate\Database\Eloquent\Model;
-use Spatie\Permission\Models\Permission;
+use Saseuz\LaravelAuthRdy\Models\Permission;
 
 class PermissionGroup extends Model 
 {

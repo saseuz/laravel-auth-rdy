@@ -2,6 +2,13 @@
 
 return [
     [
+        'name' => 'Dashboard Management',
+        'permissions' => [
+            'view-dashboard',
+            'view-site-settings',
+        ]
+    ],
+    [
         'name' => 'Admin Management',
         'permissions' => [
             'view-admin',
