@@ -1,8 +1,10 @@
 1. install spatie laravel permission by following the doc
 
 2. for uuid change in `model_has_permissions` and `model_has_roles`
+```
     - $table->unsignedBigInteger($columnNames['model_morph_key']);
     + $table->uuid($columnNames['model_morph_key']);
+```
 
 3. add this code in Providers/AppServiceProvider.php
 ```
