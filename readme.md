@@ -1,6 +1,6 @@
-1. install spatie laravel permission by following the doc
-    Add this to `app\Providers\AppServiceProvider.php`
-    - Spatie\Permission\PermissionServiceProvider::class
+1. install spatie laravel permission by following the doc <br>
+    Add this to `app\Providers\AppServiceProvider.php` <br>
+    - ```Spatie\Permission\PermissionServiceProvider::class```
     then `php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"`
 
 2. for uuid change in `model_has_permissions` and `model_has_roles`
@@ -53,18 +53,6 @@ php artisan vendor:publish --tag=install-adminauth
 And Migrate <br>
 `php artisan migrate`
 
-Add this code to database/DatabaseSeeder.php
-```
-$this->call([
-    DefaultAdminSeeder::class,
-    PermissionSeeder::class,
-]);
-```
-and Run ...
-```
-php artisan db:seed
-```
-
 5. add these in config/auth.php
 ```
 'guards' => [
@@ -83,6 +71,18 @@ php artisan db:seed
         'model' => Saseuz\LaravelAuthRdy\Models\Admin::class,
     ],
 
+```
+
+Add this code to database/DatabaseSeeder.php
+```
+$this->call([
+    DefaultAdminSeeder::class,
+    PermissionSeeder::class,
+]);
+```
+and Run ...
+```
+php artisan db:seed
 ```
 
 6. Replace to routes/backend.php
@@ -108,6 +108,21 @@ Route::group([
 
     Route::resource('admins', AdminController::class);
 });
+```
+
+7. Replace Controller.php
+```
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Routing\Controller as BaseController;
+
+abstract class Controller extends BaseController
+{
+    //
+}
+
 ```
 
 8. Replace code ..
