@@ -1,4 +1,5 @@
 1. install spatie laravel permission by following the doc 
+    <br>
     ```composer require spatie/laravel-permission```
     <br>
     Add this to `app\Providers\AppServiceProvider.php` <br>
