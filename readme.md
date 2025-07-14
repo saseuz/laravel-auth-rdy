@@ -1,6 +1,6 @@
 1. install spatie laravel permission by following the doc <br>
     Add this to `app\Providers\AppServiceProvider.php` <br>
-    - ```Spatie\Permission\PermissionServiceProvider::class```
+    - ```Spatie\Permission\PermissionServiceProvider::class``` <br>
     then `php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"`
 
 2. for uuid change in `model_has_permissions` and `model_has_roles`
