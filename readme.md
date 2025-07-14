@@ -64,15 +64,43 @@ php artisan db:seed
 
 ```
 
-6. add a middleware to routes/backend.php
+6. Register middlewares in `boostrap/app.php`
 ```
-Route::group([
-    ...
-    'middleware' => ['admin.auth']
-]
+->withMiddleware(function (Middleware $middleware): void {
+    $middleware->alias([
+        'role' => \Spatie\Permission\Middleware\RoleMiddleware::class,
+        'permission' => \Spatie\Permission\Middleware\PermissionMiddleware::class,
+        'role_or_permission' => \Spatie\Permission\Middleware\RoleOrPermissionMiddleware::class,
+    ]);
+})
 ```
 
-7. Replace code ..
+7. Replace to routes/backend.php
+```
+<?php
+
+use App\Http\Controllers\Backend\AdminController;
+use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Backend\DashboardController;
+use App\Http\Controllers\Backend\RoleController;
+
+Route::group([
+    'prefix' => admin_route(),
+    'as'     => admin_route_name(),
+    'middleware' => ['admin.auth']
+], function() {
+
+    Route::get('dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('site-settings', [DashboardController::class, 'settings'])->name('site-settings');
+
+    Route::resource('roles', RoleController::class);
+    Route::post('roles/{role}/permissions', [RoleController::class, 'updatePermissions'])->name('roles.permissions.update');
+
+    Route::resource('admins', AdminController::class);
+});
+```
+
+8. Replace code ..
 To sidebar.blade.php
 ```
 <!-- Main Sidebar Container -->
@@ -91,24 +119,13 @@ To sidebar.blade.php
             <img src="{{ asset('adminlte/dist/img/user2-160x160.jpg') }}" class="img-circle elevation-2" alt="User Image">
         </div>
         <div class="info">
-            <a href="#" class="d-block">{{ ucfirst(auth()->guard('admin')->user()->name) }}</a>
+            <a href="#" class="d-block">{{ ucfirst(auth('admin')->user()->name) }}</a>
         </div>
         </div>
 
         <!-- Sidebar Menu -->
         <nav class="mt-2">
         <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
-            <!-- Add icons to the links using the .nav-icon class
-                with font-awesome or any other icon font library -->
-            <li class="nav-item">
-                <a href="{{ route(admin_route_name() . 'dashboard') }}" class="nav-link @if(active_state('/dashboard')) active @endif">
-                    <i class="nav-icon fas fa-tachometer-alt"></i>
-                    <p>
-                    Dashboard
-                    </p>
-                </a>
-            </li>
-
             @php
                 $sidebars = config('sidebar.backend');
             @endphp
@@ -116,7 +133,7 @@ To sidebar.blade.php
             @isset($sidebars)
             @foreach($sidebars as $key => $sidebar)
                 @if(!isset($sidebar['child-view']))
-                    @can(isset($sidebar['permission']) ? $sidebar['permission'] : '')
+                    @adminCan(isset($sidebar['permission']) ? $sidebar['permission'] : '')
                     <li class="nav-item">
                         <a href="{{ route(admin_route_name().$sidebar['route']) }}" class="nav-link @if(active_state($sidebar['url'])) active @endif">
                             <i class="{{ $sidebar['icon'] }}"></i>
@@ -125,11 +142,11 @@ To sidebar.blade.php
                             </p>
                         </a>
                     </li>
-                    @endcan
+                    @endadminCan
                 @else
-                    @can(isset($sidebar['permission']) ? $sidebar['permission'] : '')
+                    @adminCan(isset($sidebar['permission']) ? $sidebar['permission'] : '')
                         <li class="nav-item has-treeview @if(tree_active_state($sidebar['url'])) menu-open @endif">
-                            <a href="#" class="nav-link @if(active_state('/user*') || active_state('/role*')) active @endif">
+                            <a href="#" class="nav-link @if(tree_active_state($sidebar['url'])) active @endif">
                                 <i class="{{ $sidebar['icon'] }}"></i>
                                 <p>
                                     {{ $sidebar['name'] }}
@@ -139,19 +156,19 @@ To sidebar.blade.php
                             <ul class="nav nav-treeview">
 
                                 @foreach($sidebar['child-view'] as $key => $child)
-                                    @can(isset($child['permission']) ? $child['permission'] : '')
+                                    @adminCan(isset($child['permission']) ? $child['permission'] : '')
                                         <li class="nav-item">
                                             <a href="{{ route(admin_route_name().$child['route']) }}" class="nav-link @if(active_state($child['url'])) active @endif">
-                                                <i class="nav-icon fas fa-user-tag"></i>
+                                                <i class="{{ $child['icon'] }}"></i>
                                                 <p>{{ $child['name'] }}</p>
                                             </a>
                                         </li>
-                                    @endcan
+                                    @endadminCan
                                 @endforeach
 
                             </ul>
                         </li>
-                    @endcan
+                    @endadminCan
                 @endif
             @endforeach
             @endisset
@@ -161,7 +178,9 @@ To sidebar.blade.php
     </div>
     <!-- /.sidebar -->
     <div class="sidebar-custom">
+        @adminCan('view-site-settings')
         <a href="{{ route(admin_route_name().'site-settings') }}" class="btn btn-link"><i class="fas fa-cogs"></i></a>
+        @endadminCan
         {{-- <a href="#" class="btn btn-secondary hide-on-collapse pos-right">Help</a> --}}
     </div>
 </aside>
