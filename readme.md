@@ -2,7 +2,7 @@
     <br>
     ```composer require spatie/laravel-permission```
     <br>
-    Add this to `app\Providers\AppServiceProvider.php` <br>
+    Add this to `bootstrap/providers.php` <br>
     - ```Spatie\Permission\PermissionServiceProvider::class``` <br>
     then `php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider"`
 
